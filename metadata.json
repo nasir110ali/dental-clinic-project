@@ -1,0 +1,6 @@
+{
+  "name": "Aura Dental Studio",
+  "description": "A premium modern dental clinic website featuring live service booking, intelligent availability scheduling, and a secure administrative dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
