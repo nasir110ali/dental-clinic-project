@@ -95,8 +95,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
         </div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
-        <div className="bg-white rounded-3xl p-8 shadow-2xl border border-slate-200 space-y-6">
+      <div className="mt-6 sm:mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-3.5 sm:px-4">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl border border-slate-200 space-y-5 sm:space-y-6">
           {/* If already authenticated but checking or unauthorized */}
           {user && !isAdmin ? (
             <div className="space-y-5">
@@ -135,7 +135,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
                 <button
                   type="button"
                   onClick={handleClaim}
-                  className="w-full flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-semibold text-xs py-2.5 px-4 rounded-xl transition-colors cursor-pointer"
+                  className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-semibold text-xs py-2.5 px-4 rounded-xl transition-colors cursor-pointer"
                 >
                   <UserCheck className="w-4 h-4" />
                   <span>Authorize Current Account (admin_users)</span>
@@ -144,7 +144,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
                 <button
                   type="button"
                   onClick={copySqlStatement}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs py-2.5 px-4 rounded-xl transition-colors cursor-pointer"
+                  className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs py-2.5 px-4 rounded-xl transition-colors cursor-pointer"
                 >
                   <Copy className="w-3.5 h-3.5" />
                   <span>{copiedSql ? 'Copied SQL Query!' : 'Copy SQL Grant Query'}</span>
@@ -154,7 +154,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
                   <button
                     type="button"
                     onClick={() => refreshAdminStatus()}
-                    className="text-xs text-teal-700 hover:text-teal-900 font-semibold cursor-pointer"
+                    className="text-xs text-teal-700 hover:text-teal-900 font-semibold cursor-pointer min-h-[40px] flex items-center"
                   >
                     Re-check Permissions
                   </button>
@@ -162,7 +162,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
                   <button
                     type="button"
                     onClick={() => signOut()}
-                    className="text-xs text-rose-600 hover:text-rose-800 font-semibold cursor-pointer"
+                    className="text-xs text-rose-600 hover:text-rose-800 font-semibold cursor-pointer min-h-[40px] flex items-center"
                   >
                     Sign Out & Switch User
                   </button>
@@ -170,7 +170,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
               <div>
                 <h2 className="text-lg font-bold text-slate-900">Sign In to Dashboard</h2>
                 <p className="text-xs text-slate-500 mt-1">
@@ -196,7 +196,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@clinic.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[44px]"
                 />
               </div>
 
@@ -211,14 +211,14 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBackToSite }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[44px]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting || isCheckingAdmin}
-                className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-teal-700 disabled:opacity-50 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-all shadow-md cursor-pointer"
+                className="w-full min-h-[48px] flex items-center justify-center gap-2 bg-slate-900 hover:bg-teal-700 disabled:opacity-50 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-all shadow-md cursor-pointer active:scale-[0.99]"
               >
                 {isSubmitting || isCheckingAdmin ? (
                   <span>Authenticating & Verifying...</span>

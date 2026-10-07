@@ -89,14 +89,14 @@ export const AppointmentsTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Filter and Search Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
         {/* Status segmented controls */}
-        <div className="flex items-center gap-1 overflow-x-auto p-1 bg-slate-100/80 rounded-xl">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar p-1 bg-slate-100/80 rounded-xl">
           {(['all', 'pending', 'confirmed', 'completed', 'cancelled'] as const).map((st) => (
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all capitalize cursor-pointer whitespace-nowrap ${
+              className={`px-3 sm:px-3.5 py-2 text-xs font-semibold rounded-lg transition-all capitalize cursor-pointer whitespace-nowrap shrink-0 min-h-[36px] ${
                 statusFilter === st
                   ? 'bg-white text-slate-900 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -104,7 +104,7 @@ export const AppointmentsTab: React.FC = () => {
             >
               {st}
               {st !== 'all' && (
-                <span className="ml-1.5 text-[11px] text-slate-400 font-normal tabular-nums">
+                <span className="ml-1 text-[11px] text-slate-400 font-normal tabular-nums">
                   ({appointments.filter((a) => a.status === st).length})
                 </span>
               )}
@@ -113,14 +113,14 @@ export const AppointmentsTab: React.FC = () => {
         </div>
 
         {/* Search Input */}
-        <div className="relative min-w-[260px]">
+        <div className="relative w-full md:w-auto md:min-w-[260px]">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search patient, phone, service..."
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
+            className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 min-h-[40px]"
           />
         </div>
       </div>
@@ -151,11 +151,11 @@ export const AppointmentsTab: React.FC = () => {
               return (
                 <div
                   key={appt.id}
-                  className="p-6 hover:bg-slate-50/50 transition-colors flex flex-col lg:flex-row lg:items-center justify-between gap-6"
+                  className="p-4 sm:p-6 hover:bg-slate-50/50 transition-colors flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6"
                 >
                   {/* Left Patient & Service Info */}
                   <div className="space-y-3 flex-1">
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <span className="text-base font-bold text-slate-900">
                         {appt.full_name}
                       </span>
@@ -165,7 +165,7 @@ export const AppointmentsTab: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-slate-600">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3 text-xs text-slate-600">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-teal-600 shrink-0" />
                         <span className="font-semibold text-slate-800">{appt.appointment_date}</span>
@@ -187,7 +187,7 @@ export const AppointmentsTab: React.FC = () => {
 
                       <div className="flex items-center gap-2">
                         <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <a href={`mailto:${appt.email}`} className="text-teal-700 hover:underline">
+                        <a href={`mailto:${appt.email}`} className="text-teal-700 hover:underline break-all">
                           {appt.email}
                         </a>
                       </div>
@@ -209,15 +209,15 @@ export const AppointmentsTab: React.FC = () => {
                   </div>
 
                   {/* Right Actions: Update Status */}
-                  <div className="flex flex-wrap items-center gap-2 shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0">
-                    <span className="text-xs text-slate-400 block lg:hidden w-full mb-1">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0 border-t lg:border-t-0 pt-3 lg:pt-0">
+                    <span className="text-xs text-slate-400 block lg:hidden w-full mb-0.5">
                       Change Status:
                     </span>
                     {appt.status !== 'confirmed' && (
                       <button
                         disabled={isUpdating}
                         onClick={() => handleStatusChange(appt.id, 'confirmed')}
-                        className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-xs disabled:opacity-50"
+                        className="px-3.5 py-2 min-h-[38px] bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-xs disabled:opacity-50"
                       >
                         Confirm
                       </button>
@@ -227,7 +227,7 @@ export const AppointmentsTab: React.FC = () => {
                       <button
                         disabled={isUpdating}
                         onClick={() => handleStatusChange(appt.id, 'completed')}
-                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-xs disabled:opacity-50"
+                        className="px-3.5 py-2 min-h-[38px] bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-xs disabled:opacity-50"
                       >
                         Complete
                       </button>
@@ -237,7 +237,7 @@ export const AppointmentsTab: React.FC = () => {
                       <button
                         disabled={isUpdating}
                         onClick={() => handleStatusChange(appt.id, 'pending')}
-                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        className="px-3.5 py-2 min-h-[38px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer disabled:opacity-50"
                       >
                         Reset Pending
                       </button>
@@ -247,7 +247,7 @@ export const AppointmentsTab: React.FC = () => {
                       <button
                         disabled={isUpdating}
                         onClick={() => handleStatusChange(appt.id, 'cancelled')}
-                        className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-semibold cursor-pointer disabled:opacity-50"
+                        className="px-3.5 py-2 min-h-[38px] bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-semibold cursor-pointer disabled:opacity-50"
                       >
                         Cancel
                       </button>

@@ -80,7 +80,7 @@ export const ClinicSettingsTab: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-xs space-y-6">
+      <div className="bg-white p-4 sm:p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-xs space-y-5 sm:space-y-6">
         <div>
           <h3 className="text-base font-bold text-slate-900">Clinic Profile & Booking Engine Rules</h3>
           <p className="text-xs text-slate-500 mt-1">
@@ -102,8 +102,8 @@ export const ClinicSettingsTab: React.FC = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {/* Clinic Name */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
@@ -116,7 +116,7 @@ export const ClinicSettingsTab: React.FC = () => {
                 value={clinicName}
                 onChange={(e) => setClinicName(e.target.value)}
                 placeholder="e.g. Aura Dental Studio"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
               />
             </div>
 
@@ -132,7 +132,7 @@ export const ClinicSettingsTab: React.FC = () => {
                 value={clinicPhone}
                 onChange={(e) => setClinicPhone(e.target.value)}
                 placeholder="+1 555 123 4567"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
               />
             </div>
 
@@ -148,7 +148,7 @@ export const ClinicSettingsTab: React.FC = () => {
                 value={clinicEmail}
                 onChange={(e) => setClinicEmail(e.target.value)}
                 placeholder="hello@auradental.com"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
               />
             </div>
 
@@ -164,7 +164,7 @@ export const ClinicSettingsTab: React.FC = () => {
                 value={clinicAddress}
                 onChange={(e) => setClinicAddress(e.target.value)}
                 placeholder="123 Main Street, Suite 400, New York, NY"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
               />
             </div>
 
@@ -177,7 +177,7 @@ export const ClinicSettingsTab: React.FC = () => {
               <select
                 value={slotInterval}
                 onChange={(e) => setSlotInterval(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
               >
                 <option value={15}>15 minutes (High density)</option>
                 <option value={30}>30 minutes (Standard)</option>
@@ -202,7 +202,7 @@ export const ClinicSettingsTab: React.FC = () => {
                 required
                 value={noticeHours}
                 onChange={(e) => setNoticeHours(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs tabular-nums focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs tabular-nums focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
               />
               <p className="text-[11px] text-slate-500 mt-1">
                 Patients cannot book time slots starting earlier than this buffer window.
@@ -214,7 +214,7 @@ export const ClinicSettingsTab: React.FC = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className="flex items-center gap-2 bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white font-semibold text-xs py-3 px-6 rounded-xl transition-colors cursor-pointer shadow-xs"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white font-semibold text-xs py-3 px-6 rounded-xl transition-colors cursor-pointer shadow-xs min-h-[46px] active:scale-[0.99]"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? 'Updating...' : 'Save Clinic Settings'}</span>

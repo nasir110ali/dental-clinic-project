@@ -70,7 +70,7 @@ export const BlockedDatesTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header and Add Form Card */}
-      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-xs space-y-6">
+      <div className="bg-white p-4 sm:p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-xs space-y-5 sm:space-y-6">
         <div>
           <h3 className="text-base font-bold text-slate-900">Blocked Dates & Holidays</h3>
           <p className="text-xs text-slate-500 mt-1">
@@ -92,7 +92,7 @@ export const BlockedDatesTab: React.FC = () => {
           </div>
         )}
 
-        <form onSubmit={handleAddBlockedDate} className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end pt-2">
+        <form onSubmit={handleAddBlockedDate} className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 sm:gap-4 items-end pt-1">
           <div className="sm:col-span-4">
             <label className="block text-xs font-semibold text-slate-700 mb-1">
               Select Date *
@@ -102,7 +102,7 @@ export const BlockedDatesTab: React.FC = () => {
               required
               value={dateInput}
               onChange={(e) => setDateInput(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
             />
           </div>
 
@@ -116,7 +116,7 @@ export const BlockedDatesTab: React.FC = () => {
               value={reasonInput}
               onChange={(e) => setReasonInput(e.target.value)}
               placeholder="e.g. Annual Staff Training Seminar"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white min-h-[42px]"
             />
           </div>
 
@@ -124,7 +124,7 @@ export const BlockedDatesTab: React.FC = () => {
             <button
               type="submit"
               disabled={isAdding}
-              className="w-full flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white font-semibold text-xs py-2.5 px-4 rounded-xl transition-colors cursor-pointer shadow-xs"
+              className="w-full min-h-[42px] flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white font-semibold text-xs py-2.5 px-4 rounded-xl transition-colors cursor-pointer shadow-xs active:scale-[0.99]"
             >
               <Plus className="w-4 h-4" />
               <span>{isAdding ? 'Blocking...' : 'Block Date'}</span>
@@ -135,7 +135,7 @@ export const BlockedDatesTab: React.FC = () => {
 
       {/* Blocked Dates List */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
           <h4 className="text-sm font-bold text-slate-900">Currently Blocked Dates</h4>
           <span className="text-xs text-slate-400 tabular-nums font-mono">
             {blockedDates.length} entries
@@ -163,14 +163,14 @@ export const BlockedDatesTab: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className="p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors"
+                  className="p-4 sm:p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors gap-3"
                 >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-3">
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <span className="text-sm font-bold font-mono text-slate-900">
                         {item.blocked_date}
                       </span>
-                      <span className="text-xs text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-md font-medium">
+                      <span className="text-xs text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-md font-medium truncate max-w-[200px] sm:max-w-none">
                         {item.reason}
                       </span>
                     </div>
@@ -182,8 +182,9 @@ export const BlockedDatesTab: React.FC = () => {
                   <button
                     disabled={isDeleting}
                     onClick={() => handleDelete(item.id)}
-                    className="p-2 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                    className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer disabled:opacity-50 shrink-0"
                     title="Remove blackout date"
+                    aria-label={`Remove blackout date ${item.blocked_date}`}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

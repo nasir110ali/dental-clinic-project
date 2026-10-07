@@ -213,11 +213,11 @@ export const ServicesTab: React.FC = () => {
 
       {/* Modal / Drawer for Add or Edit */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/50 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 shadow-2xl border border-slate-200 space-y-5 sm:space-y-6 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 sm:pb-4">
               <div>
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900">
                   {editingService ? 'Edit Dental Service' : 'Add New Dental Service'}
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
@@ -226,7 +226,8 @@ export const ServicesTab: React.FC = () => {
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center -mr-2 rounded-lg hover:bg-slate-100 cursor-pointer"
+                aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -250,7 +251,7 @@ export const ServicesTab: React.FC = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Comprehensive Checkup & Polish"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 min-h-[42px]"
                 />
               </div>
 
@@ -263,11 +264,11 @@ export const ServicesTab: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Explain what the patient can expect during this visit..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Duration (Minutes) *
@@ -279,7 +280,7 @@ export const ServicesTab: React.FC = () => {
                     required
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(Number(e.target.value))}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs tabular-nums focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs tabular-nums focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 min-h-[42px]"
                   />
                 </div>
 
@@ -294,13 +295,13 @@ export const ServicesTab: React.FC = () => {
                     required
                     value={price}
                     onChange={(e) => setPrice(Number(e.target.value))}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs tabular-nums focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-base sm:text-xs tabular-nums focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 min-h-[42px]"
                   />
                 </div>
               </div>
 
-              <div className="pt-2">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className="pt-1">
+                <label className="flex items-center gap-2.5 cursor-pointer py-1">
                   <input
                     type="checkbox"
                     checked={isActive}
@@ -313,18 +314,18 @@ export const ServicesTab: React.FC = () => {
                 </label>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer text-center min-h-[42px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="px-6 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white text-xs font-semibold cursor-pointer shadow-xs"
+                  className="px-6 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white text-xs font-semibold cursor-pointer shadow-xs min-h-[44px]"
                 >
                   {isSaving ? 'Saving...' : editingService ? 'Save Changes' : 'Create Service'}
                 </button>

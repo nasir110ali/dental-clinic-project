@@ -17,21 +17,21 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onBookClick }) => {
 
   return (
     <footer className="bg-slate-900 text-slate-400 border-t border-slate-800 text-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10">
           {/* Brand Column */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-2.5 text-white font-bold text-lg">
-              <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white">
+          <div className="sm:col-span-2 lg:col-span-5 space-y-3.5">
+            <div className="flex items-center gap-2.5 text-white font-bold text-base sm:text-lg">
+              <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white shrink-0">
                 <Sparkles className="w-4 h-4" />
               </div>
-              <span>{clinicName}</span>
+              <span className="truncate">{clinicName}</span>
             </div>
             <p className="text-slate-400 max-w-sm leading-relaxed text-xs">
               State-of-the-art restorative, aesthetic, and preventive dentistry delivered with an uncompromising standard of patient comfort and clinical precision.
             </p>
-            <div className="flex items-center gap-2 text-slate-500 pt-2 text-[11px]">
-              <Heart className="w-3.5 h-3.5 text-teal-500" />
+            <div className="flex items-center gap-2 text-slate-500 pt-1 text-[11px]">
+              <Heart className="w-3.5 h-3.5 text-teal-500 shrink-0" />
               <span>Dedicated to healthy, confident smiles.</span>
             </div>
           </div>
@@ -43,24 +43,24 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onBookClick }) => {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#services" className="hover:text-white transition-colors">
+                <a href="#services" className="hover:text-white transition-colors py-1 inline-block">
                   Treatments & Fees
                 </a>
               </li>
               <li>
-                <a href="#about" className="hover:text-white transition-colors">
+                <a href="#about" className="hover:text-white transition-colors py-1 inline-block">
                   Our Facility & Standards
                 </a>
               </li>
               <li>
-                <a href="#schedule" className="hover:text-white transition-colors">
+                <a href="#schedule" className="hover:text-white transition-colors py-1 inline-block">
                   Office Hours & Location
                 </a>
               </li>
               <li>
                 <button
                   onClick={onBookClick}
-                  className="hover:text-white transition-colors text-left cursor-pointer text-teal-400 font-medium"
+                  className="hover:text-white transition-colors text-left cursor-pointer text-teal-400 font-medium py-1 inline-block"
                 >
                   Book an Appointment
                 </button>
@@ -74,17 +74,25 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onBookClick }) => {
               Clinic Inquiries
             </h4>
             <div className="space-y-2 text-xs text-slate-400">
-              <p>{clinicAddress}</p>
-              <p className="tabular-nums">Phone: {clinicPhone}</p>
-              <p>Email: {clinicEmail}</p>
+              <p className="leading-relaxed">{clinicAddress}</p>
+              <p>
+                <a href={`tel:${clinicPhone.replace(/\s+/g, '')}`} className="tabular-nums hover:text-white transition-colors">
+                  Phone: {clinicPhone}
+                </a>
+              </p>
+              <p>
+                <a href={`mailto:${clinicEmail}`} className="hover:text-white transition-colors break-all">
+                  Email: {clinicEmail}
+                </a>
+              </p>
             </div>
 
-            <div className="pt-3">
+            <div className="pt-2">
               <button
                 onClick={onOpenAdmin}
-                className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors text-[11px] font-medium cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors text-[11px] font-medium cursor-pointer py-1"
               >
-                <Shield className="w-3.5 h-3.5 text-teal-500" />
+                <Shield className="w-3.5 h-3.5 text-teal-500 shrink-0" />
                 <span>Dental Office Admin Portal</span>
               </button>
             </div>
@@ -92,10 +100,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onBookClick }) => {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+        <div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400 text-center sm:text-left">
           <p>© {new Date().getFullYear()} {clinicName}. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <span>HIPAA-Compliant Protocols</span>
+          <div className="flex items-center gap-3">
+            <span>HIPAA Protocols</span>
             <span aria-hidden="true">·</span>
             <span>OSHA Certified Facility</span>
           </div>
