@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const ServicesTab: React.FC = () => {
-  const { services, refreshServices, saveServiceLocally } = useClinic();
+  const { services, refreshServices, saveServiceLocally, isLoading } = useClinic();
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -131,7 +131,13 @@ export const ServicesTab: React.FC = () => {
 
       {/* Services Table */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
-        {services.length === 0 ? (
+        {isLoading && services.length === 0 ? (
+          <div className="p-16 text-center text-slate-500 space-y-3">
+            <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-base font-bold text-slate-800">Loading services...</p>
+            <p className="text-xs text-slate-400">Fetching treatments from Supabase.</p>
+          </div>
+        ) : services.length === 0 ? (
           <div className="p-16 text-center text-slate-500">
             <Sparkles className="w-12 h-12 text-slate-300 mx-auto mb-3" />
             <p className="text-base font-bold text-slate-800">No services configured</p>

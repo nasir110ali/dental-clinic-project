@@ -15,7 +15,7 @@ const WEEKDAYS = [
 ];
 
 export const BusinessHoursTab: React.FC = () => {
-  const { businessHours, refreshBusinessHours, saveBusinessHoursLocally } = useClinic();
+  const { businessHours, refreshBusinessHours, saveBusinessHoursLocally, isLoading } = useClinic();
 
   // Local state copy for responsive in-place editing
   const [localHours, setLocalHours] = useState<BusinessHours[]>(businessHours);
@@ -80,6 +80,16 @@ export const BusinessHoursTab: React.FC = () => {
       setSavingId(null);
     }
   };
+
+  if (isLoading && localHours.length === 0) {
+    return (
+      <div className="bg-white p-16 rounded-2xl border border-slate-200/90 shadow-xs text-center space-y-3">
+        <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-base font-bold text-slate-800">Loading operating schedule...</p>
+        <p className="text-xs text-slate-400">Fetching business hours from Supabase.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

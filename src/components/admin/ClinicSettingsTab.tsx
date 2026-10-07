@@ -4,7 +4,7 @@ import { updateClinicSettings } from '../../lib/api';
 import { Building2, Mail, Phone, MapPin, Clock, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export const ClinicSettingsTab: React.FC = () => {
-  const { settings, refreshSettings, saveSettingsLocally } = useClinic();
+  const { settings, refreshSettings, saveSettingsLocally, isLoading } = useClinic();
 
   const [clinicName, setClinicName] = useState('');
   const [clinicEmail, setClinicEmail] = useState('');
@@ -67,6 +67,16 @@ export const ClinicSettingsTab: React.FC = () => {
       setIsSaving(false);
     }
   };
+
+  if (isLoading && !settings) {
+    return (
+      <div className="bg-white p-16 rounded-2xl border border-slate-200/90 shadow-xs text-center space-y-3">
+        <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-base font-bold text-slate-800">Loading clinic configuration...</p>
+        <p className="text-xs text-slate-400">Retrieving clinic settings from Supabase.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export const AppointmentsTab: React.FC = () => {
-  const { appointments, refreshAppointments, updateAppointmentLocally } = useClinic();
+  const { appointments, refreshAppointments, updateAppointmentLocally, isLoading } = useClinic();
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -127,7 +127,13 @@ export const AppointmentsTab: React.FC = () => {
 
       {/* Appointments List / Table */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
-        {filteredAppointments.length === 0 ? (
+        {isLoading && appointments.length === 0 ? (
+          <div className="p-16 text-center text-slate-500 space-y-3">
+            <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-base font-bold text-slate-800">Loading appointments...</p>
+            <p className="text-xs text-slate-400">Fetching records from Supabase.</p>
+          </div>
+        ) : filteredAppointments.length === 0 ? (
           <div className="p-16 text-center text-slate-500">
             <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
             <p className="text-base font-bold text-slate-800">No appointments found</p>

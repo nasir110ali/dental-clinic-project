@@ -1,6 +1,7 @@
 import { Appointment, BusinessHours, BlockedDate, ClinicSettings, Service, TimeSlot } from '../types/database';
 
 export function formatDateKey(d: Date): string {
+  if (!(d instanceof Date) || isNaN(d.getTime())) return '';
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
@@ -8,6 +9,7 @@ export function formatDateKey(d: Date): string {
 }
 
 export function formatTimeString(d: Date): string {
+  if (!(d instanceof Date) || isNaN(d.getTime())) return '00:00:00';
   const hours = String(d.getHours()).padStart(2, '0');
   const minutes = String(d.getMinutes()).padStart(2, '0');
   const seconds = String(d.getSeconds()).padStart(2, '0');
@@ -15,19 +17,23 @@ export function formatTimeString(d: Date): string {
 }
 
 export function formatDisplayTime(d: Date): string {
+  if (!(d instanceof Date) || isNaN(d.getTime())) return '';
   return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
 export function formatDisplayDate(d: Date): string {
+  if (!(d instanceof Date) || isNaN(d.getTime())) return '';
   return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export function parseTimeParts(timeStr: string): { hours: number; minutes: number } {
   if (!timeStr) return { hours: 0, minutes: 0 };
-  const parts = timeStr.split(':');
+  const parts = String(timeStr).trim().split(':');
+  const hours = parseInt(parts[0] || '0', 10);
+  const minutes = parseInt(parts[1] || '0', 10);
   return {
-    hours: parseInt(parts[0] || '0', 10),
-    minutes: parseInt(parts[1] || '0', 10),
+    hours: isNaN(hours) ? 0 : hours,
+    minutes: isNaN(minutes) ? 0 : minutes,
   };
 }
 
@@ -55,10 +61,18 @@ export function computeAvailableSlots(params: AvailabilityParams): {
     existingAppointments,
   } = params;
 
+  if (!selectedDate || isNaN(selectedDate.getTime())) {
+    return {
+      slots: [],
+      isBlocked: false,
+      isClosedDay: false,
+    };
+  }
+
   const dateStr = formatDateKey(selectedDate);
 
   // 1. Check if date is blocked
-  const blocked = blockedDates.find((b) => b.blocked_date === dateStr);
+  const blocked = blockedDates.find((b) => (b.blocked_date || '').trim() === dateStr);
   if (blocked) {
     return {
       slots: [],
@@ -99,10 +113,19 @@ export function computeAvailableSlots(params: AvailabilityParams): {
 
   // Filter existing active appointments on this day (ignore cancelled)
   const dayAppointments = existingAppointments
-    .filter((a) => a.appointment_date === dateStr && a.status !== 'cancelled')
+    .filter((a) => {
+      const apptDate = (a.appointment_date || '').split('T')[0].trim();
+      return apptDate === dateStr && a.status !== 'cancelled';
+    })
     .map((a) => {
       const { hours: sh, minutes: sm } = parseTimeParts(a.start_time);
-      const { hours: eh, minutes: em } = parseTimeParts(a.end_time);
+      let { hours: eh, minutes: em } = parseTimeParts(a.end_time);
+      if (eh === 0 && em === 0 && (sh !== 0 || sm !== 0)) {
+        const fallbackEndMs = new Date(year, month, day, sh, sm, 0, 0).getTime() + 30 * 60 * 1000;
+        const fallbackEndDate = new Date(fallbackEndMs);
+        eh = fallbackEndDate.getHours();
+        em = fallbackEndDate.getMinutes();
+      }
       return {
         start: new Date(year, month, day, sh, sm, 0, 0),
         end: new Date(year, month, day, eh, em, 0, 0),

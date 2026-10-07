@@ -9,6 +9,7 @@ export const BlockedDatesTab: React.FC = () => {
     refreshBlockedDates,
     addBlockedDateLocally,
     removeBlockedDateLocally,
+    isLoading,
   } = useClinic();
 
   const [dateInput, setDateInput] = useState('');
@@ -141,7 +142,13 @@ export const BlockedDatesTab: React.FC = () => {
           </span>
         </div>
 
-        {blockedDates.length === 0 ? (
+        {isLoading && blockedDates.length === 0 ? (
+          <div className="p-12 text-center text-slate-500 space-y-2">
+            <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-sm font-bold text-slate-800">Loading blocked dates...</p>
+            <p className="text-xs text-slate-400">Fetching records from Supabase.</p>
+          </div>
+        ) : blockedDates.length === 0 ? (
           <div className="p-12 text-center text-slate-500">
             <ShieldAlert className="w-10 h-10 text-slate-300 mx-auto mb-2" />
             <p className="text-sm font-bold text-slate-700">No dates currently blocked</p>

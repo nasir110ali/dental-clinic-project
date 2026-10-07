@@ -23,6 +23,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
     activeServices,
     refreshAppointments,
     updateAppointmentLocally,
+    isLoading,
   } = useClinic();
 
   const total = appointments.length;
@@ -148,7 +149,13 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ onNavigateTab }) => {
             </button>
           </div>
 
-          {recentAppointments.length === 0 ? (
+          {isLoading && appointments.length === 0 ? (
+            <div className="p-12 text-center text-slate-500 space-y-2">
+              <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+              <p className="text-sm font-bold text-slate-800">Loading recent appointments...</p>
+              <p className="text-xs text-slate-400">Fetching records from Supabase.</p>
+            </div>
+          ) : recentAppointments.length === 0 ? (
             <div className="p-12 text-center text-slate-500">
               <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-2" />
               <p className="text-sm font-medium">No appointments registered yet.</p>

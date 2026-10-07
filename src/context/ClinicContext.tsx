@@ -35,6 +35,7 @@ interface ClinicContextType {
   removeBlockedDateLocally: (id: string) => void;
   saveSettingsLocally: (newSettings: ClinicSettings) => void;
   updateAppointmentLocally: (id: string, status: Appointment['status']) => void;
+  addAppointmentLocally: (appointment: Appointment) => void;
 }
 
 const ClinicContext = createContext<ClinicContextType | undefined>(undefined);
@@ -87,7 +88,13 @@ export const ClinicProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const refreshAppointments = useCallback(async () => {
     try {
       const data = await getAppointments();
-      setAppointments(data);
+      if (data && data.length > 0) {
+        setAppointments((prev) => {
+          const fetchedIds = new Set(data.map((d) => d.id));
+          const localOnly = prev.filter((p) => !fetchedIds.has(p.id));
+          return [...data, ...localOnly];
+        });
+      }
     } catch (err) {
       console.error('Failed to load appointments', err);
     }
@@ -155,6 +162,13 @@ export const ClinicProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
   };
 
+  const addAppointmentLocally = (appointment: Appointment) => {
+    setAppointments((prev) => {
+      if (prev.some((a) => a.id === appointment.id)) return prev;
+      return [appointment, ...prev];
+    });
+  };
+
   const activeServices = services.filter((s) => s.is_active);
 
   return (
@@ -180,6 +194,7 @@ export const ClinicProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         removeBlockedDateLocally,
         saveSettingsLocally,
         updateAppointmentLocally,
+        addAppointmentLocally,
       }}
     >
       {children}

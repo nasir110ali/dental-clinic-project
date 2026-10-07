@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useClinic } from '../../context/ClinicContext';
 import { Service, TimeSlot, Appointment } from '../../types/database';
 import {
@@ -38,6 +38,8 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
     settings: clinicSettings,
     appointments,
     refreshAppointments,
+    addAppointmentLocally,
+    isLoading,
   } = useClinic();
 
   // Booking Step State: 1 = Service, 2 = Date & Time, 3 = Patient Details, 4 = Success
@@ -47,7 +49,6 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
   // Start from tomorrow or today depending on hours
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
     const d = new Date();
-    // Default to tomorrow to maximize slot availability
     d.setDate(d.getDate() + 1);
     return d;
   });
@@ -77,7 +78,6 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
   const availableDates = useMemo(() => {
     const dates: Date[] = [];
     const now = new Date();
-    // Next 14 days
     for (let i = 0; i < 14; i++) {
       const d = new Date();
       d.setDate(now.getDate() + i);
@@ -85,6 +85,27 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
     }
     return dates;
   }, []);
+
+  // Auto-advance to first open date if selectedDate is closed or blocked
+  useEffect(() => {
+    if (businessHours.length === 0) return;
+    const currentWeekday = selectedDate.getDay();
+    const currentSchedule = businessHours.find((b) => b.weekday === currentWeekday);
+    const currentDateKey = formatDateKey(selectedDate);
+    const isCurrentBlocked = blockedDates.some((b) => (b.blocked_date || '').trim() === currentDateKey);
+
+    if (!currentSchedule || !currentSchedule.is_open || isCurrentBlocked) {
+      for (const d of availableDates) {
+        const sched = businessHours.find((b) => b.weekday === d.getDay());
+        const dKey = formatDateKey(d);
+        const isB = blockedDates.some((b) => (b.blocked_date || '').trim() === dKey);
+        if (sched && sched.is_open && !isB) {
+          setSelectedDate(d);
+          break;
+        }
+      }
+    }
+  }, [businessHours, blockedDates, availableDates]);
 
   // Compute slots for current selectedDate & selectedService
   const availabilityResult = useMemo(() => {
@@ -142,6 +163,10 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
       };
 
       const result = await createAppointment(payload);
+      addAppointmentLocally({
+        ...result,
+        service: selectedService,
+      });
       setCreatedAppointment({
         ...result,
         service: selectedService,
@@ -256,48 +281,64 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {activeServices.map((service) => {
-                  const isSelected = selectedService?.id === service.id;
-                  return (
-                    <button
-                      key={service.id}
-                      type="button"
-                      onClick={() => {
-                        onSelectService(service);
-                        setSelectedSlot(null);
-                      }}
-                      className={`text-left p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                        isSelected
-                          ? 'border-teal-600 bg-teal-50/50 shadow-sm ring-1 ring-teal-600'
-                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-base font-bold text-slate-900">{service.name}</h4>
-                          <span className="text-sm font-bold text-teal-800 tabular-nums">
-                            ${service.price}
+              {isLoading && activeServices.length === 0 ? (
+                <div className="p-12 text-center bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                  <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                  <p className="text-sm font-bold text-slate-800">Loading Available Treatments...</p>
+                  <p className="text-xs text-slate-500">Retrieving clinic catalog directly from database.</p>
+                </div>
+              ) : activeServices.length === 0 ? (
+                <div className="p-12 text-center bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                  <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
+                  <p className="text-sm font-bold text-slate-800">No Services Available Currently</p>
+                  <p className="text-xs text-slate-500">
+                    The clinic does not currently have active public procedures listed. Please contact the front desk directly.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {activeServices.map((service) => {
+                    const isSelected = selectedService?.id === service.id;
+                    return (
+                      <button
+                        key={service.id}
+                        type="button"
+                        onClick={() => {
+                          onSelectService(service);
+                          setSelectedSlot(null);
+                        }}
+                        className={`text-left p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                          isSelected
+                            ? 'border-teal-600 bg-teal-50/50 shadow-sm ring-1 ring-teal-600'
+                            : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-base font-bold text-slate-900">{service.name}</h4>
+                            <span className="text-sm font-bold text-teal-800 tabular-nums">
+                              ${service.price}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                            {service.description}
+                          </p>
+                        </div>
+
+                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                          <span className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-teal-600" />
+                            <span className="tabular-nums">{service.duration_minutes} min appointment</span>
+                          </span>
+                          <span className={`font-semibold ${isSelected ? 'text-teal-700' : 'text-slate-400'}`}>
+                            {isSelected ? 'Selected' : 'Select'}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                          {service.description}
-                        </p>
-                      </div>
-
-                      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-teal-600" />
-                          <span className="tabular-nums">{service.duration_minutes} min appointment</span>
-                        </span>
-                        <span className={`font-semibold ${isSelected ? 'text-teal-700' : 'text-slate-400'}`}>
-                          {isSelected ? 'Selected' : 'Select'}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               <div className="pt-4 flex justify-end">
                 <button
